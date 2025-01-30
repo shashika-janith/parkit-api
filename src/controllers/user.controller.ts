@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Request, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/use-cases/users/users.service';
 
@@ -16,5 +16,18 @@ export class UserController {
       firstName: user.firstName,
       lastName: user.lastName,
     };
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('filter')
+  async filterUsers(
+    @Query('pageNo') pageNo: string,
+    @Query('pageSize') pageSize: string,
+  ) {
+    const res = await this.userService.filter(
+      parseInt(pageNo),
+      parseInt(pageSize),
+    );
+    return res;
   }
 }

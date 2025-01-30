@@ -1,9 +1,8 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { BaseDataService } from 'src/core/abstracts';
 import { UserEntity } from './entities/user.entity';
 import { MySqlBaseRepository } from './mysql-base-repository';
 import { UserRepository } from './user.repository';
+import { BaseDataService } from 'src/core/abstracts';
 
 @Injectable()
 export class MySqlDataService
@@ -11,10 +10,7 @@ export class MySqlDataService
 {
   users: MySqlBaseRepository<UserEntity>;
 
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   onApplicationBootstrap() {
     this.users = this.userRepository;

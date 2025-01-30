@@ -30,8 +30,8 @@ export class MongoRepository<T> implements BaseRepository<T> {
     return this._repository.findById(id).exec();
   }
 
-  getAll(): Promise<T[]> {
-    return this._repository.find().populate(this._populateOnFind).exec();
+  getAll(page: number, limit: number): Promise<[T[], number]> {
+    throw new Error('Method not implemented.');
   }
 
   findOne(query: any): Promise<T> {

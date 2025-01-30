@@ -1,13 +1,15 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { BaseDataService } from 'src/core/abstracts';
-import { CreateUserDto } from '../../core/dtos/create-user.dto';
-import { UserEntity } from 'src/repository/mysql/entities/user.entity';
 import { User } from 'src/core/entities/user.entity';
+import { UserEntity } from 'src/repository/mysql/entities/user.entity';
+import { CreateUserDto } from '../../core/dtos/create-user.dto';
+import { QueryFailedError } from 'typeorm';
+import { Mapper } from 'src/utils/mapper';
 
 @Injectable()
 export class UsersService {
-  constructor(private dataService: BaseDataService) {}
+  constructor(private dataService: BaseDataService<UserEntity>) {}
 
   async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // You can adjust the number of salt rounds
@@ -32,6 +34,7 @@ export class UsersService {
         user.firstName = res.firstName;
         user.lastName = res.lastName;
         user.phone = res.phone;
+        user.password = res.password;
 
         return user;
       }
@@ -39,6 +42,30 @@ export class UsersService {
       return undefined;
     } catch (error) {
       Logger.error(error);
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async filter(page: number, limit: number): Promise<any> {
+    try {
+      const [entities, total] = await this.dataService.users.getAll(
+        page,
+        limit,
+      );
+
+      const users = entities.map((entity) => Mapper.toUser(entity));
+
+      return {
+        data: users,
+        total,
+        currentPage: page,
+        pageSize: limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    } catch {
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -71,6 +98,14 @@ export class UsersService {
       }
     } catch (error) {
       Logger.error(error);
+
+      if (
+        error instanceof QueryFailedError &&
+        'ER_DUP_ENTRY' === error.driverError.code
+      ) {
+        throw new HttpException('Email already exist', HttpStatus.BAD_REQUEST);
+      }
+
       throw new HttpException(
         'Internal server error',
         HttpStatus.INTERNAL_SERVER_ERROR,

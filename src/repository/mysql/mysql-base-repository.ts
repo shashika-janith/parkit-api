@@ -11,9 +11,8 @@ export abstract class MySqlBaseRepository<T extends BaseEntity>
     this._repository = repository;
   }
 
-  create(data: T): Promise<T> {
+  async create(data: T): Promise<T> {
     const record = this._repository.create(data);
-    console.log('Rec', record);
     return record.save();
   }
 
@@ -37,7 +36,15 @@ export abstract class MySqlBaseRepository<T extends BaseEntity>
     });
   }
 
-  async getAll(): Promise<T[]> {
-    return this._repository.find();
+  getAll(page: number, limit: number): Promise<[T[], number]> {
+    throw new Error('Method not implemented.');
   }
+
+  // async getAll(page: number, limit: number): Promise<[T[], number]> {
+  //   return this._repository.findAndCount({
+  //     take: limit, // Number of records per page
+  //     skip: (page - 1) * limit, // Offset calculation
+  //     order: { createdAt: 'DESC' }, // Sorting order
+  //   });
+  // }
 }
