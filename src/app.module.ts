@@ -14,7 +14,6 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
     AuthModule,
     UsersModule,
   ],
-  controllers: [UserController],
   providers: [],
 })
 export class AppModule {}

@@ -5,7 +5,7 @@ export class User {
   email: string;
   phone: string;
   password?: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  isActive?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

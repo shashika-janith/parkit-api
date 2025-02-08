@@ -1,28 +1,20 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { BaseDataService } from 'src/core/abstracts';
 import { User } from 'src/core/entities/user.entity';
 import { UserEntity } from 'src/repository/mysql/entities/user.entity';
-import { CreateUserDto } from '../../core/dtos/create-user.dto';
-import { QueryFailedError } from 'typeorm';
+import { DataService } from 'src/repository/mysql/mysql-data-service.service';
 import { Mapper } from 'src/utils/mapper';
+import { QueryFailedError } from 'typeorm';
+import { CreateUserDto } from '../../core/dtos/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private dataService: BaseDataService<UserEntity>) {}
+  constructor(private dataService: DataService) {}
 
   async hashPassword(password: string): Promise<string> {
     const saltRounds = 10; // You can adjust the number of salt rounds
     return bcrypt.hash(password, saltRounds);
   }
-
-  // async findOneById(userId: number): Promise<User | undefined> {
-  //     try {
-  //         return this.userRepository.findOneBy({ id: userId });
-  //     } catch (error) {
-  //         console.log(error);
-  //     }
-  // }
 
   async findOneByEmail(email: string): Promise<User | undefined> {
     try {
@@ -30,6 +22,7 @@ export class UsersService {
 
       if (res) {
         const user = new User();
+        user.id = res.id;
         user.email = res.email;
         user.firstName = res.firstName;
         user.lastName = res.lastName;
