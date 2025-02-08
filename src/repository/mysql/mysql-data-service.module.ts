@@ -1,20 +1,25 @@
 import { Module } from '@nestjs/common';
 import { BaseDataService } from 'src/core/abstracts';
 import { DatabaseModule } from './database.module';
-import { MySqlDataService } from './mysql-data-service.service';
+import { DataService } from './mysql-data-service.service';
 import { userProviders } from './providers/user.providers';
 import { UserRepository } from './user.repository';
+import { parkingAreaProviders } from './providers/parking-area.providers';
+import { ParkingAreaRepository } from './parking-area.repository';
 
 @Module({
   imports: [DatabaseModule],
   providers: [
     ...userProviders,
     UserRepository,
+    ...parkingAreaProviders,
+    ParkingAreaRepository,
     {
       provide: BaseDataService,
-      useClass: MySqlDataService,
+      useClass: DataService,
     },
+    DataService, // Explicitly providing DataService to access any custom method in repositories.
   ],
-  exports: [BaseDataService],
+  exports: [BaseDataService, DataService],
 })
 export class MySqlDataServiceModule {}

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { DataServicesModule } from './repository/data-service.module';
-import { AuthModule } from './auth/auth.module';
-import { UserController } from './controllers/user.controller';
-import { UsersModule } from './use-cases/users/users.module';
 import { DevtoolsModule } from '@nestjs/devtools-integration';
+import { AuthModule } from './auth/auth.module';
+import { DataServicesModule } from './repository/data-service.module';
+import { ParkingAreasModule } from './use-cases/parking-spots/parking-areas.module';
+import { UsersModule } from './use-cases/users/users.module';
 
 @Module({
   imports: [
@@ -13,6 +13,7 @@ import { DevtoolsModule } from '@nestjs/devtools-integration';
     DataServicesModule,
     AuthModule,
     UsersModule,
+    ParkingAreasModule,
   ],
   providers: [],
 })

@@ -15,10 +15,6 @@ export class UserRepository extends MySqlBaseRepository<UserEntity> {
     page: number,
     limit: number,
   ): Promise<[UserEntity[], number]> {
-    return this.repository.findAndCount({
-      take: limit, // Number of records per page
-      skip: (page - 1) * limit, // Offset calculation
-      order: { createdAt: 'DESC' }, // Sorting order
-    });
+    return super.getAll(page, limit, { id: 'ASC' });
   }
 }

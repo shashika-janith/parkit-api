@@ -4,5 +4,9 @@ export abstract class BaseRepository<T> {
   abstract delete(id: number): Promise<void>;
   abstract findById(id: number): Promise<T>;
   abstract findOneBy(params: { [k: string]: string }): Promise<T>;
-  abstract getAll(page: number, limit: number): Promise<[T[], number]>;
+  abstract getAll(
+    page: number,
+    limit: number,
+    ...args: any[]
+  ): Promise<[T[], number]>;
 }

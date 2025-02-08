@@ -1,5 +1,5 @@
 import { BaseRepository } from 'src/core/abstracts';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, Repository } from 'typeorm';
 import { BaseEntity } from './entities/base.entity';
 
 export abstract class MySqlBaseRepository<T extends BaseEntity>
@@ -36,15 +36,15 @@ export abstract class MySqlBaseRepository<T extends BaseEntity>
     });
   }
 
-  getAll(page: number, limit: number): Promise<[T[], number]> {
-    throw new Error('Method not implemented.');
+  async getAll(
+    page: number,
+    limit: number,
+    order: FindOptionsOrder<T>,
+  ): Promise<[T[], number]> {
+    return this._repository.findAndCount({
+      order,
+      take: limit, // Number of records per page
+      skip: (page - 1) * limit, // Offset calculation
+    });
   }
-
-  // async getAll(page: number, limit: number): Promise<[T[], number]> {
-  //   return this._repository.findAndCount({
-  //     take: limit, // Number of records per page
-  //     skip: (page - 1) * limit, // Offset calculation
-  //     order: { createdAt: 'DESC' }, // Sorting order
-  //   });
-  // }
 }
