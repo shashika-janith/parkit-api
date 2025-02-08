@@ -4,6 +4,7 @@ import { UserEntity } from 'src/repository/mysql/entities/user.entity';
 export class Mapper {
   static toUser(entity: UserEntity): User {
     const user = new User();
+    user.id = entity.id;
     user.email = entity.email;
     user.phone = entity.phone;
     user.firstName = entity.firstName;
