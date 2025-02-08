@@ -3,13 +3,13 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { UsersService } from 'src/use-cases/users/users.service';
 
 @Controller('user')
-export class UserController {
-  constructor(private userService: UsersService) {}
+export class UsersController {
+  constructor(private service: UsersService) {}
 
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getProfile(@Request() req) {
-    const user = await this.userService.findOneByEmail(req.user.email);
+    const user = await this.service.findOneByEmail(req.user.email);
 
     return {
       email: user.email,
@@ -24,10 +24,7 @@ export class UserController {
     @Query('pageNo') pageNo: string,
     @Query('pageSize') pageSize: string,
   ) {
-    const res = await this.userService.filter(
-      parseInt(pageNo),
-      parseInt(pageSize),
-    );
+    const res = await this.service.filter(parseInt(pageNo), parseInt(pageSize));
     return res;
   }
 }
