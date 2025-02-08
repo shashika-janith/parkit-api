@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { ParkingAreaEntity } from './parking-area.entity';
 
-@Entity('user')
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -23,4 +24,7 @@ export class UserEntity extends BaseEntity {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => ParkingAreaEntity, (area) => area.user)
+  parkingAreas: ParkingAreaEntity[];
 }
