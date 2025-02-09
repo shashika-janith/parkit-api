@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InsertResult, Repository } from 'typeorm';
+import { InsertResult, Repository, SelectQueryBuilder } from 'typeorm';
 import { ParkingAreaEntity } from './entities/parking-area.entity';
 import { MySqlBaseRepository } from './mysql-base-repository';
 import { CreateParkingAreaDto } from 'src/core/dtos/create-parking-area.dto';
@@ -11,6 +11,23 @@ export class ParkingAreaRepository extends MySqlBaseRepository<ParkingAreaEntity
     private repository: Repository<ParkingAreaEntity>,
   ) {
     super(repository);
+  }
+
+  private buildQuery(): SelectQueryBuilder<ParkingAreaEntity> {
+    return this.repository
+      .createQueryBuilder()
+      .select([
+        'id',
+        'phone',
+        'address',
+        'type',
+        'rate',
+        'availableSlots',
+        'occupiedSlots',
+        'security',
+        'ST_X(coordinates) AS longitude',
+        'ST_Y(coordinates) AS latitude',
+      ]);
   }
 
   async createOne(
@@ -51,11 +68,27 @@ export class ParkingAreaRepository extends MySqlBaseRepository<ParkingAreaEntity
       .getRawOne();
   }
 
-  async filter(
+  async filterByUser(
     page: number,
     limit: number,
-    latitude: string,
-    longitude: string,
+    userId: number,
+  ): Promise<[Promise<any[]>, Promise<number>]> {
+    const queryBuilder = this.buildQuery()
+      .where('userId = :userId', { userId })
+      .skip((page - 1) * limit)
+      .take(limit);
+
+    const result = queryBuilder.getRawMany();
+    const count = queryBuilder.getCount();
+
+    return [result, count];
+  }
+
+  async filterNearby(
+    page: number,
+    limit: number,
+    latitude: number,
+    longitude: number,
   ): Promise<[Promise<any[]>, Promise<number>]> {
     const radius = 2000; // Distance in meters.
 

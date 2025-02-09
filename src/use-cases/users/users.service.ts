@@ -16,6 +16,11 @@ export class UsersService {
     return bcrypt.hash(password, saltRounds);
   }
 
+  /**
+   * Finds a user by email address.
+   * @param {string} email Email address.
+   * @returns Promise<User | undefined>
+   */
   async findOneByEmail(email: string): Promise<User | undefined> {
     try {
       const res = await this.dataService.users.findOneBy({ email });
@@ -42,6 +47,12 @@ export class UsersService {
     }
   }
 
+  /**
+   * Filter the users.
+   * @param page Current page.
+   * @param limit Page size.
+   * @returns Promise<any>
+   */
   async filter(page: number, limit: number): Promise<any> {
     try {
       const [entities, total] = await this.dataService.users.getAll(
@@ -66,6 +77,11 @@ export class UsersService {
     }
   }
 
+  /**
+   * Creates a new user.
+   * @param {CreateUserDto} createUserDto User data.
+   * @returns Promise<User>
+   */
   async create(createUserDto: CreateUserDto): Promise<User> {
     const hashedPassword = await this.hashPassword(createUserDto.password);
 
