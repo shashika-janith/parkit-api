@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { DataServicesModule } from './repository/data-service.module';
 import { ParkingAreasModule } from './use-cases/parking-spots/parking-areas.module';
 import { UsersModule } from './use-cases/users/users.module';
+import { FavoritesModule } from './use-cases/favorites/favorites.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from './use-cases/users/users.module';
     AuthModule,
     UsersModule,
     ParkingAreasModule,
+    FavoritesModule,
   ],
   providers: [],
 })
