@@ -30,6 +30,12 @@ export class ParkingAreaRepository extends MySqlBaseRepository<ParkingAreaEntity
       ]);
   }
 
+  /**
+   * Creates a new parking area DB record.
+   * @param dto - Data Transfer Object containing the details of the parking area to be created.
+   * @param userId - The ID of the user creating the parking area record.
+   * @returns The newly created parking area record.
+   */
   async createOne(
     dto: CreateParkingAreaDto,
     userId: number,
@@ -49,6 +55,11 @@ export class ParkingAreaRepository extends MySqlBaseRepository<ParkingAreaEntity
       .execute();
   }
 
+  /**
+   * Retrieves a parking area record from the database by its unique identifier.
+   * @param id - The unique identifier of the record to retrieve.
+   * @returns A Promise that resolves to the record if found, or `null` if no record matches the provided ID.
+   */
   override async findById(id: number): Promise<any> {
     return this.repository
       .createQueryBuilder()
