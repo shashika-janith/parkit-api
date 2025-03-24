@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   Request,
@@ -25,11 +26,12 @@ export class ParkingAreasController {
 
   /**
    * Filters nearby parking areas.
+   *
    * @param {FilterParkingAreasDto} dto Request payload.
    * @returns
    */
   @UseGuards(JwtAuthGuard)
-  @Get('filter')
+  @Post('filter')
   async filterNearByParkingAreas(@Body() dto: FilterParkingAreasDto) {
     const res = await this.service.filterNearby(
       dto.pageNo,
@@ -61,5 +63,16 @@ export class ParkingAreasController {
       req.user.userId,
     );
     return res;
+  }
+
+  /**
+   * Adds a parking area to favorites.
+   *
+   * @param id - The ID of the parking area to be added to favorites.
+   */
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async getParkingArea(@Param('id') id: number) {
+    return await this.service.findById(id);
   }
 }

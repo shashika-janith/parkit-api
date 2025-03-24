@@ -1,7 +1,7 @@
 import { AreaType } from 'src/enum/area-type.enum';
 import { SafetySecurity } from 'src/enum/safety-security.enum';
 
-export class ParkingArea {
+export class ParkingAreaDto {
   id: number;
   name: string;
   phone: string;

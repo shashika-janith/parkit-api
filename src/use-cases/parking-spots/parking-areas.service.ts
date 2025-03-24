@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { CreateParkingAreaDto } from 'src/core/dtos/create-parking-area.dto';
+import { ParkingAreaDto } from 'src/core/dtos/parking-area.dto';
 import { ParkingArea } from 'src/core/entities/parking-area.entity';
 import { DataService } from 'src/repository/mysql/mysql-data-service.service';
 
@@ -27,6 +28,7 @@ export class ParkingAreasService {
           const data = entities.map((entity) => {
             const area = new ParkingArea();
             area.id = entity.id;
+            area.name = 'Test Parking Area';
             area.phone = entity.phone;
             area.address = entity.address;
             area.rate = entity.rate;
@@ -70,6 +72,7 @@ export class ParkingAreasService {
   ): Promise<any> {
     const [entitiesPromise, totalPromise] =
       await this.dataService.parkingAreas.filterByUser(page, limit, userId);
+
     return Promise.all([entitiesPromise, totalPromise]).then(
       ([entities, count]) => {
         const data = entities.map((entity) => {
@@ -95,12 +98,6 @@ export class ParkingAreasService {
           totalPages: Math.ceil(count / limit),
         };
       },
-    );
-  }
-  catch(error) {
-    throw new HttpException(
-      'Internal server error',
-      HttpStatus.INTERNAL_SERVER_ERROR,
     );
   }
 
@@ -139,6 +136,20 @@ export class ParkingAreasService {
 
         return area;
       }
+    } catch (error) {
+      Logger.error(error);
+
+      throw new HttpException(
+        'Internal server error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async findById(id: number): Promise<ParkingAreaDto> {
+    try {
+      const res = await this.dataService.parkingAreas.findById(id);
+      return res;
     } catch (error) {
       Logger.error(error);
 
