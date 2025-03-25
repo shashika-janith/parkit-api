@@ -1,4 +1,10 @@
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { BaseEntity } from './base.entity';
 import { ParkingAreaEntity } from './parking-area.entity';
 import { UserEntity } from './user.entity';
@@ -8,11 +14,11 @@ export class FavoriteEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => ParkingAreaEntity)
+  @ManyToOne(() => ParkingAreaEntity, (parkingArea) => parkingArea.favorites)
   @JoinColumn()
-  paringArea: ParkingAreaEntity;
+  parkingArea: ParkingAreaEntity;
 
-  @OneToOne(() => UserEntity)
+  @ManyToOne(() => UserEntity, (user) => user.favorites)
   @JoinColumn()
   user: UserEntity;
 }

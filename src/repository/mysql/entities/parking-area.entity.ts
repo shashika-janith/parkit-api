@@ -1,14 +1,16 @@
+import { AreaType } from 'src/enum/area-type.enum';
+import { SafetySecurity } from 'src/enum/safety-security.enum';
 import {
   Column,
   Entity,
   Index,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { BaseEntity } from './base.entity';
-import { SafetySecurity } from 'src/enum/safety-security.enum';
+import { FavoriteEntity } from './favorite.entity';
 import { UserEntity } from './user.entity';
-import { AreaType } from 'src/enum/area-type.enum';
 
 @Entity('parking_areas')
 export class ParkingAreaEntity extends BaseEntity {
@@ -32,7 +34,7 @@ export class ParkingAreaEntity extends BaseEntity {
   rate: number;
 
   @Column({ type: 'smallint', default: 0 })
-  availableSlots: number;
+  capacity: number;
 
   @Column({ type: 'smallint', default: 0 })
   occupiedSlots: number;
@@ -45,4 +47,7 @@ export class ParkingAreaEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (user) => user.parkingAreas)
   user: UserEntity;
+
+  @OneToMany(() => FavoriteEntity, (favorite) => favorite.parkingArea)
+  favorites: FavoriteEntity[];
 }

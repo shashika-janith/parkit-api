@@ -10,10 +10,10 @@ export class ParkingAreaDto {
   longitude: string;
   type: AreaType;
   rate: number;
-  availableSlots: number;
+  capacity: number;
   occupiedSlots: number;
   security: SafetySecurity[];
   isActive?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

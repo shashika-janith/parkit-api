@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseEntity } from './base.entity';
+import { FavoriteEntity } from './favorite.entity';
 import { ParkingAreaEntity } from './parking-area.entity';
 
 @Entity('users')
@@ -27,4 +28,7 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => ParkingAreaEntity, (area) => area.user)
   parkingAreas: ParkingAreaEntity[];
+
+  @OneToMany(() => FavoriteEntity, (favorite) => favorite.parkingArea)
+  favorites: FavoriteEntity[];
 }
