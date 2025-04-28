@@ -23,6 +23,7 @@ export class FavoriteRepository extends MySqlBaseRepository<FavoriteEntity> {
       .select([
         'favorites.id AS id',
         'parkingArea.id as entityId',
+        'parkingArea.name as name',
         'parkingArea.phone AS phone',
         'parkingArea.address AS address',
         'parkingArea.type AS type',

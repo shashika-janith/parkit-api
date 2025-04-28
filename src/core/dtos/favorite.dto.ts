@@ -10,7 +10,7 @@ export class FavoriteDto {
   latitude: string;
   longitude: string;
   type: AreaType;
-  rate: number;
+  hourlyRate: number;
   capacity: number;
   occupiedSlots: number;
   security: SafetySecurity[];
@@ -26,9 +26,9 @@ export class FavoriteDto {
     this.latitude = data['latitude'];
     this.longitude = data['longitude'];
     this.type = data['type'];
-    this.rate = data['rate'];
+    this.hourlyRate = data['hourlyRate'];
     this.capacity = data['capacity'];
     this.occupiedSlots = data['occupiedSlots'];
-    this.security = data['security'];
+    this.security = data['security']?.split(',') || [];
   }
 }
